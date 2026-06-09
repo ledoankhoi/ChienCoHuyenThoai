@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Trận Vuông Kết Hợp Hiệu Ứng Chi Tiết</title>
+    <style>
+        :root {
+            --primary-color: #1F4E78;
+            --header-text: #FFFFFF;
+            --diagonal-bg: #F2F2F2;
+            --combo-bg: #E2EFDA;
+            --border-color: #BFBFBF;
+            --text-dark: #333333;
+            --text-muted: #595959;
+        }
+
+        body {
+            font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        /* Tabs setup */
+        .tabs {
+            display: flex;
+            margin-bottom: -1px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #e0e0e0;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            font-weight: bold;
+            color: var(--text-muted);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            margin-right: 4px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: var(--primary-color);
+            border-bottom: 1px solid #fff;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+        }
+
+        .tab-content {
+            display: none;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Table styles */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--header-text);
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Matrix Tab specific styles */
+        .matrix-table th:first-child {
+            width: 150px;
+        }
+
+        .matrix-table td:first-child {
+            background-color: var(--primary-color);
+            color: var(--header-text);
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .cell-diagonal {
+            background-color: var(--diagonal-bg);
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .cell-combo {
+            background-color: var(--combo-bg);
+            text-align: left;
+        }
+
+        .cell-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+            color: #1a4266;
+        }
+
+        .cell-desc {
+            font-size: 13px;
+            color: #444;
+        }
+
+        /* Note footer */
+        .note {
+            font-style: italic;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* List Tab specific styles */
+        .list-table th {
+            padding: 10px;
+        }
+        
+        .list-table tr:nth-child(even) td {
+            background-color: #fcfcfc;
+        }
+        
+        .list-table td.combo-type {
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .list-table td.formula {
+            text-align: center;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        
+        .list-table td.trigger-state {
+            font-weight: bold;
+            color: #2e6930;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hệ Thống Thiết Kế Kỹ Năng - Chiến Cơ Huyền Thoại</h1>
+
+    <div class="tabs">
+        <div class="tab-btn active" onclick="switchTab('matrix-tab')">Ma Trận Hiệu Ứng Chi Tiết</div>
+        <div class="tab-btn" onclick="switchTab('list-tab')">Danh Sách Tổng Hợp</div>
+    </div>
+
+    <div id="matrix-tab" class="tab-content active">
+        <div class="table-container">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Hiệu Ứng Gốc</th>
+                        <th>Bỏng (Lửa)</th>
+                        <th>Băng (Nước)</th>
+                        <th>Xé Nát (Gió)</th>
+                        <th>Nứt Vỡ (Đất)</th>
+                        <th>Trật Tự (Sáng)</th>
+                        <th>Hỗn Loạn (Tối)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bỏng (Lửa)</td>
+                        <td class="cell-diagonal">CHÁY (Thuần Lửa)<br><br><span style="font-weight:normal; font-size:13px;">[Hiệu ứng]: Giảm máu tối đa theo thời gian. Nhận thêm sát thương từ mọi nguồn.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Sốc Nhiệt ➔ Cái Chết Tức Thì</span><span class="cell-desc">[Chi tiết]: Kết liễu mục tiêu dưới 15% máu (mỗi tầng Sốc nhiệt tăng ngưỡng kết liễu thêm 1.5% máu).</span></td>
+                        <td class="cell-combo"><span class="cell-title">Đau Đớn ➔ Xuyên Thủng</span><span class="cell-desc">[Chi tiết]: Đưa Giáp và Miễn thương của mục tiêu về 0 (mỗi tầng Đau đớn giảm 10% Giáp/Miễn thương).</span></td>
+                        <td class="cell-combo"><span class="cell-title">Dung Nham ➔ Nóng Chảy</span><span class="cell-desc">[Chi tiết]: Phá hủy hệ thống vũ khí địch. Giảm tốc độ bắn của địch, đạt 10 tầng khiến địch bị 'Kẹt đạn' (không thể tấn công trong vài giây).</span></td>
+                        <td class="cell-combo"><span class="cell-title">Thanh Trừng ➔ Tro Tàn</span><span class="cell-desc">[Chi tiết]: Đốt cháy bùa lợi. Xóa bỏ ngẫu nhiên các buff của địch, đạt 10 tầng khiến địch bị 'Cấm chữa lành' và vô hiệu hóa mọi lớp lá chắn.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Hỏa Ngục ➔ Thiêu Rụi</span><span class="cell-desc">[Chi tiết]: Đốt năng lượng/thanh nộ. Mỗi tầng trừ Năng lượng của địch, đạt 10 tầng phát nổ gây sát thương bằng đúng số Năng lượng đã bị đốt.</span></td>
+                    </tr>
+                    <tr>
+                        <td>Băng (Nước)</td>
+                        <td class="cell-combo"><span class="cell-title">Sốc Nhiệt ➔ Cái Chết Tức Thì</span><span class="cell-desc">[Chi tiết]: Kết liễu mục tiêu dưới 15% máu (mỗi tầng Sốc nhiệt tăng ngưỡng kết liễu thêm 1.5% máu).</span></td>
+                        <td class="cell-diagonal">BỎNG LẠNH (Thuần Nước)<br><br><span style="font-weight:normal; font-size:13px;">[Hiệu ứng]: Bất động vĩnh viễn.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Bão Tuyết ➔ Tuyết Lở</span><span class="cell-desc">[Chi tiết]: Giảm tốc độ đạn bay của đối phương. Mỗi tầng giảm 10%, đạt 10 tầng khiến đạn của địch bay chậm đến mức gần như đứng im giữa không trung.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Xói Mòn ➔ Phân Rã</span><span class="cell-desc">[Chi tiết]: Bào mòn cấu trúc tàu. Mỗi đòn đánh vào mục tiêu có tỷ lệ làm rớt ra các hạt năng lượng/máu để phi công nhặt hồi phục. Đạt 10 tầng tỷ lệ rơi hạt là 100%.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Phản Quang ➔ Gương Vỡ</span><span class="cell-desc">[Chi tiết]: Tạo ra lớp vỏ tinh thể trên thân địch. Mỗi tầng khiến địch tự chịu lại 5% sát thương chúng gây ra. Đạt 10 tầng, đòn đánh tiếp theo của địch bị phản lại 100% sát thương.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Vực Thẳm ➔ Mù Lòa</span><span class="cell-desc">[Chi tiết]: Tác động vào hệ thống ngắm bắn. Mỗi tầng làm đạn địch bay chệch hướng dần, đạt 10 tầng địch mất hoàn toàn khả năng ngắm mục tiêu (đạn bay tứ tung).</span></td>
+                    </tr>
+                    <tr>
+                        <td>Xé Nát (Gió)</td>
+                        <td class="cell-combo"><span class="cell-title">Đau Đớn ➔ Xuyên Thủng</span><span class="cell-desc">[Chi tiết]: Đưa Giáp và Miễn thương của mục tiêu về 0 (mỗi tầng Đau đớn giảm 10% Giáp/Miễn thương).</span></td>
+                        <td class="cell-combo"><span class="cell-title">Bão Tuyết ➔ Tuyết Lở</span><span class="cell-desc">[Chi tiết]: Giảm tốc độ đạn bay của đối phương. Mỗi tầng giảm 10%, đạt 10 tầng khiến đạn của địch bay chậm đến mức gần như đứng im giữa không trung.</span></td>
+                        <td class="cell-diagonal">NGHIỀN NÁT (Thuần Gió)<br><br><span style="font-weight:normal; font-size:13px;">[Hiệu ứng]: Giảm tăng miễn thương cuối.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Vũ Bão ➔ Chịu Trận</span><span class="cell-desc">[Chi tiết]: Giảm mọi chỉ số của mục tiêu xuống còn 50% (mỗi tầng Vũ bão giảm 5% mọi chỉ số).</span></td>
+                        <td class="cell-combo"><span class="cell-title">Phán Quyết ➔ Cấm Chú</span><span class="cell-desc">[Chi tiết]: Cắt đứt hệ thống truyền dữ liệu. Mỗi tầng giảm sát thương kỹ năng của địch, đạt 10 tầng 'Câm lặng', khóa toàn bộ vũ khí phụ và nội tại của địch.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Lốc Đen ➔ Nuốt Chửng</span><span class="cell-desc">[Chi tiết]: Tạo một hố đen từ tính quanh mục tiêu. Đạt 10 tầng, hố đen này sẽ tự động 'hút' mọi đường đạn bay trượt của bạn vòng lại và cắm thẳng vào thân địch.</span></td>
+                    </tr>
+                    <tr>
+                        <td>Nứt Vỡ (Đất)</td>
+                        <td class="cell-combo"><span class="cell-title">Dung Nham ➔ Nóng Chảy</span><span class="cell-desc">[Chi tiết]: Phá hủy hệ thống vũ khí địch. Giảm tốc độ bắn của địch, đạt 10 tầng khiến địch bị 'Kẹt đạn' (không thể tấn công trong vài giây).</span></td>
+                        <td class="cell-combo"><span class="cell-title">Xói Mòn ➔ Phân Rã</span><span class="cell-desc">[Chi tiết]: Bào mòn cấu trúc tàu. Mỗi đòn đánh vào mục tiêu có tỷ lệ làm rớt ra các hạt năng lượng/máu để phi công nhặt hồi phục. Đạt 10 tầng tỷ lệ rơi hạt là 100%.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Vũ Bão ➔ Chịu Trận</span><span class="cell-desc">[Chi tiết]: Giảm mọi chỉ số của mục tiêu xuống còn 50% (mỗi tầng Vũ bão giảm 5% mọi chỉ số).</span></td>
+                        <td class="cell-diagonal">VỠ NÁT (Thuần Đất)<br><br><span style="font-weight:normal; font-size:13px;">[Hiệu ứng]: Giảm tăng sát thương cuối.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Phong Ấn ➔ Trọng Lực</span><span class="cell-desc">[Chi tiết]: Đè bẹp khả năng lẩn tránh. Giảm dần tỷ lệ Né (Evasion) của địch. Đạt 10 tầng, mọi đòn đánh của bạn vào mục tiêu này chắc chắn là đòn Chí mạng.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Từ Trường ➔ Quá Tải</span><span class="cell-desc">[Chi tiết]: Biến thân tàu địch thành cột thu lôi. Đạt 10 tầng, sát thương đánh vào mục tiêu này sẽ tạo thành 'Tia lửa điện' nảy sang các bộ phận khác hoặc các kẻ địch xung quanh.</span></td>
+                    </tr>
+                    <tr>
+                        <td>Trật Tự (Sáng)</td>
+                        <td class="cell-combo"><span class="cell-title">Thanh Trừng ➔ Tro Tàn</span><span class="cell-desc">[Chi tiết]: Đốt cháy bùa lợi. Xóa bỏ ngẫu nhiên các buff của địch, đạt 10 tầng khiến địch bị 'Cấm chữa lành' và vô hiệu hóa mọi lớp lá chắn.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Phản Quang ➔ Gương Vỡ</span><span class="cell-desc">[Chi tiết]: Tạo ra lớp vỏ tinh thể trên thân địch. Mỗi tầng khiến địch tự chịu lại 5% sát thương chúng gây ra. Đạt 10 tầng, đòn đánh tiếp theo của địch bị phản lại 100% sát thương.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Phán Quyết ➔ Cấm Chú</span><span class="cell-desc">[Chi tiết]: Cắt đứt hệ thống truyền dữ liệu. Mỗi tầng giảm sát thương kỹ năng của địch, đạt 10 tầng 'Câm lặng', khóa toàn bộ vũ khí phụ và nội tại của địch.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Phong Ấn ➔ Trọng Lực</span><span class="cell-desc">[Chi tiết]: Đè bẹp khả năng lẩn tránh. Giảm dần tỷ lệ Né (Evasion) của địch. Đạt 10 tầng, mọi đòn đánh của bạn vào mục tiêu này chắc chắn là đòn Chí mạng.</span></td>
+                        <td class="cell-diagonal">QUANG TINH (Thuần Sáng)<br><br><span style="font-weight:normal; font-size:13px;">[Hiệu ứng]: Gây thêm sát thương chuẩn.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Nhật Thực ➔ Đảo Nghịch</span><span class="cell-desc">[Chi tiết]: Bẻ cong thực tại. Đạt 10 tầng, bất kỳ chiêu trò hồi máu nào của địch cũng biến thành sát thương độc tố tự cắn trả chúng, và mọi sát thương địch đánh vào bạn đều chuyển thành hồi HP cho chiến cơ của bạn.</span></td>
+                    </tr>
+                    <tr>
+                        <td>Hỗn Loạn (Tối)</td>
+                        <td class="cell-combo"><span class="cell-title">Hỏa Ngục ➔ Thiêu Rụi</span><span class="cell-desc">[Chi tiết]: Đốt năng lượng/thanh nộ. Mỗi tầng trừ Năng lượng của địch, đạt 10 tầng phát nổ gây sát thương bằng đúng số Năng lượng đã bị đốt.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Vực Thẳm ➔ Mù Lòa</span><span class="cell-desc">[Chi tiết]: Tác động vào hệ thống ngắm bắn. Mỗi tầng làm đạn địch bay chệch hướng dần, đạt 10 tầng địch mất hoàn toàn khả năng ngắm mục tiêu (đạn bay tứ tung).</span></td>
+                        <td class="cell-combo"><span class="cell-title">Lốc Đen ➔ Nuốt Chửng</span><span class="cell-desc">[Chi tiết]: Tạo một hố đen từ tính quanh mục tiêu. Đạt 10 tầng, hố đen này sẽ tự động 'hút' mọi đường đạn bay trượt của bạn vòng lại và cắm thẳng vào thân địch.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Từ Trường ➔ Quá Tải</span><span class="cell-desc">[Chi tiết]: Biến thân tàu địch thành cột thu lôi. Đạt 10 tầng, sát thương đánh vào mục tiêu này sẽ tạo thành 'Tia lửa điện' nảy sang các bộ phận khác hoặc các kẻ địch xung quanh.</span></td>
+                        <td class="cell-combo"><span class="cell-title">Nhật Thực ➔ Đảo Nghịch</span><span class="cell-desc">[Chi tiết]: Bẻ cong thực tại. Đạt 10 tầng, bất kỳ chiêu trò hồi máu nào của địch cũng biến thành sát thương độc tố tự cắn trả chúng, và mọi sát thương địch đánh vào bạn đều chuyển thành hồi HP cho chiến cơ của bạn.</span></td>
+                        <td class="cell-diagonal">BẠO LOẠN (Thuần Tối)<br><br><span style="font-weight:normal; font-size:13px;">[Hiệu ứng]: Tự trừ máu bằng ST chuẩn theo thời gian.</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="note">* Hướng dẫn đọc bảng: Ô giao giữa Hàng và Cột hiển thị cơ chế và chỉ số chi tiết khi tích đủ 10 tầng trạng thái chéo. Các ô màu xám biểu thị thuộc tính nâng cấp Thuần Hệ.</div>
+    </div>
+
+    <div id="list-tab" class="tab-content">
+        <div class="table-container">
+            <table class="list-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Loại Combo</th>
+                        <th style="width: 15%">Công Thức Kết Hợp</th>
+                        <th style="width: 30%">Trạng Thái & Kích Hoạt</th>
+                        <th style="width: 40%">Mô Tả Chi Tiết Cơ Chế Chỉ Số</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="combo-type">Thiết kế của bạn</td>
+                        <td class="formula">Băng + Bỏng</td>
+                        <td class="trigger-state">Sốc Nhiệt * 10 = Cái Chết Tức Thì</td>
+                        <td>Kết liễu mục tiêu dưới 15% máu (mỗi tầng Sốc nhiệt tăng ngưỡng kết liễu thêm 1.5% máu).</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Thiết kế của bạn</td>
+                        <td class="formula">Xé Nát + Nứt Vỡ</td>
+                        <td class="trigger-state">Vũ Bão * 10 = Chịu Trận</td>
+                        <td>Giảm mọi chỉ số của mục tiêu xuống còn 50% (mỗi tầng Vũ bão giảm 5% mọi chỉ số).</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Thiết kế của bạn</td>
+                        <td class="formula">Bỏng + Xé Nát</td>
+                        <td class="trigger-state">Đau Đớn * 10 = Xuyên Thủng</td>
+                        <td>Đưa Giáp và Miễn thương của mục tiêu về 0 (mỗi tầng Đau đớn giảm 10% Giáp/Miễn thương).</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Lửa</td>
+                        <td class="formula">Bỏng + Nứt Vỡ</td>
+                        <td class="trigger-state">Dung Nham * 10 = Nóng Chảy</td>
+                        <td>Phá hủy hệ thống vũ khí địch. Giảm tốc độ bắn của địch, đạt 10 tầng khiến địch bị 'Kẹt đạn' (không thể tấn công trong vài giây).</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Lửa</td>
+                        <td class="formula">Bỏng + Trật Tự</td>
+                        <td class="trigger-state">Thanh Trừng * 10 = Tro Tàn</td>
+                        <td>Đốt cháy bùa lợi. Xóa bỏ ngẫu nhiên các buff của địch, đạt 10 tầng khiến địch bị 'Cấm chữa lành' và vô hiệu hóa mọi lớp lá chắn.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Lửa</td>
+                        <td class="formula">Bỏng + Hỗn Loạn</td>
+                        <td class="trigger-state">Hỏa Ngục * 10 = Thiêu Rụi</td>
+                        <td>Đốt năng lượng/thanh nộ. Mỗi tầng trừ Năng lượng của địch, đạt 10 tầng phát nổ gây sát thương bằng đúng số Năng lượng đã bị đốt.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Nước</td>
+                        <td class="formula">Băng + Xé Nát</td>
+                        <td class="trigger-state">Bão Tuyết * 10 = Tuyết Lở</td>
+                        <td>Giảm tốc độ đạn bay của đối phương. Mỗi tầng giảm 10%, đạt 10 tầng khiến đạn của địch bay chậm đến mức gần như đứng im giữa không trung.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Nước</td>
+                        <td class="formula">Băng + Nứt Vỡ</td>
+                        <td class="trigger-state">Xói Mòn * 10 = Phân Rã</td>
+                        <td>Bào mòn cấu trúc tàu. Mỗi đòn đánh vào mục tiêu có tỷ lệ làm rớt ra các hạt năng lượng/máu để phi công nhặt hồi phục. Đạt 10 tầng tỷ lệ rơi hạt là 100%.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Nước</td>
+                        <td class="formula">Băng + Trật Tự</td>
+                        <td class="trigger-state">Phản Quang * 10 = Gương Vỡ</td>
+                        <td>Tạo ra lớp vỏ tinh thể trên thân địch. Mỗi tầng khiến địch tự chịu lại 5% sát thương chúng gây ra. Đạt 10 tầng, đòn đánh tiếp theo của địch bị phản lại 100% sát thương.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Nước</td>
+                        <td class="formula">Băng + Hỗn Loạn</td>
+                        <td class="trigger-state">Vực Thẳm * 10 = Mù Lòa</td>
+                        <td>Tác động vào hệ thống ngắm bắn. Mỗi tầng làm đạn địch bay chệch hướng dần, đạt 10 tầng địch mất hoàn toàn khả năng ngắm mục tiêu (đạn bay tứ tung).</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Gió</td>
+                        <td class="formula">Xé Nát + Trật Tự</td>
+                        <td class="trigger-state">Phán Quyết * 10 = Cấm Chú</td>
+                        <td>Cắt đứt hệ thống truyền dữ liệu. Mỗi tầng giảm sát thương kỹ năng của địch, đạt 10 tầng 'Câm lặng', khóa toàn bộ vũ khí phụ và nội tại của địch.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Gió</td>
+                        <td class="formula">Xé Nát + Hỗn Loạn</td>
+                        <td class="trigger-state">Lốc Đen * 10 = Nuốt Chửng</td>
+                        <td>Tạo một hố đen từ tính quanh mục tiêu. Đạt 10 tầng, hố đen này sẽ tự động 'hút' mọi đường đạn bay trượt của bạn vòng lại và cắm thẳng vào thân địch.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Đất</td>
+                        <td class="formula">Nứt Vỡ + Trật Tự</td>
+                        <td class="trigger-state">Phong Ấn * 10 = Trọng Lực</td>
+                        <td>Đè bẹp khả năng lẩn tránh. Giảm dần tỷ lệ Né (Evasion) của địch. Đạt 10 tầng, mọi đòn đánh của bạn vào mục tiêu này chắc chắn là đòn Chí mạng.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Đất</td>
+                        <td class="formula">Nứt Vỡ + Hỗn Loạn</td>
+                        <td class="trigger-state">Từ Trường * 10 = Quá Tải</td>
+                        <td>Biến thân tàu địch thành cột thu lôi. Đạt 10 tầng, sát thương đánh vào mục tiêu này sẽ tạo thành 'Tia lửa điện' nảy sang các bộ phận khác hoặc các kẻ địch xung quanh.</td>
+                    </tr>
+                    <tr>
+                        <td class="combo-type">Nhánh Tối Thượng</td>
+                        <td class="formula">Trật Tự + Hỗn Loạn</td>
+                        <td class="trigger-state">Nhật Thực * 10 = Đảo Nghịch</td>
+                        <td>Bẻ cong thực tại. Đạt 10 tầng, bất kỳ chiêu trò hồi máu nào của địch cũng biến thành sát thương độc tố tự cắn trả chúng, và mọi sát thương địch đánh vào bạn đều chuyển thành hồi HP cho chiến cơ của bạn.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Hàm xử lý logic chuyển đổi qua lại giữa các Tab
+        function switchTab(tabId) {
+            // Loại bỏ class active ở tất cả các tab content và tab button
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Kích hoạt tab được chọn
+            document.getElementById(tabId).classList.add('active');
+            
+            // Tìm và kích hoạt button tương ứng
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

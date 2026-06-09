@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "*": "allow",
+    "external_directory": "deny"
+  },
+  "instructions": [
+    ".opencode/rules.md",
+    ".opencode/AGENTS.md"
+  ],
+  "mcp": {
+    "codegraph": {
+      "type": "local",
+      "command": ["codegraph", "mcp"],
+      "enabled": true
+    },
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@github/github-mcp-server"],
+      "enabled": true
+    }
+  }
+}

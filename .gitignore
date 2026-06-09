@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+*.csproj
+.sln
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Config
+.env
+*.env.local
+
+# Opencode
+.opencode/node_modules/
+
+# Excel temp
+~$*.xlsx
