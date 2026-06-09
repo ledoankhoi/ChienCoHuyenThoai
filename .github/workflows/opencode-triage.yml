@@ -1,0 +1,29 @@
+name: OpenCode Issue Triage
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: anomalyco/opencode/github@latest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          model: anthropic/claude-sonnet-4-20250514
+          prompt: |
+            Xử lý issue mới cho game Chiến Cơ Huyền Thoại:
+            - Nếu là bug rõ ràng: tìm fix và tạo PR
+            - Nếu là feature request: phân tích khả thi
+            - Nếu cần thông tin: hỏi lại người dùng

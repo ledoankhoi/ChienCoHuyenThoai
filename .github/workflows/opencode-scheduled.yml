@@ -1,0 +1,80 @@
+name: OpenCode Daily Auto Tasks
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # 1h sáng UTC (8h sáng VN)
+    - cron: "0 13 * * *"  # 13h chiều UTC (20h tối VN)
+
+jobs:
+  lint-and-fix:
+    name: Auto Lint & Fix
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: anomalyco/opencode/github@latest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          model: anthropic/claude-sonnet-4-20250514
+          prompt: |
+            Chạy auto maintenance cho dự án Chiến Cơ Huyền Thoại:
+            1. Kiểm tra và fix lỗi code style
+            2. Xóa file rác, temp files
+            3. Tạo TODO.md nếu chưa có, cập nhật task list
+            4. Nếu có thay đổi, tạo pull request với title "chore(auto): daily maintenance"
+
+  generate-content:
+    name: Auto Generate Game Content
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: anomalyco/opencode/github@latest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          model: anthropic/claude-sonnet-4-20250514
+          prompt: |
+            Sinh nội dung mới cho game Chiến Cơ Huyền Thoại:
+            1. Đọc docs/architecture.md và goc.md để hiểu game
+            2. Viết thêm mô tả cho 3 chiến cơ mới (mỗi cái 1 paragraph)
+            3. Viết 1 đoạn hội thoại cho phi công chính
+            4. Ghi vào tools/docs/noi_dung_hoi_thoai.md
+            5. Commit nếu có thay đổi
+
+  balance-check:
+    name: Auto Balance Check
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: anomalyco/opencode/github@latest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          model: anthropic/claude-sonnet-4-20250514
+          prompt: |
+            Kiểm tra cân bằng game Chiến Cơ Huyền Thoại:
+            1. Đọc goc.md để hiểu các chỉ số và hệ thống
+            2. Phân tích: tỷ lệ gacha, sức mạnh hiệu ứng, công thức sát thương
+            3. Nếu phát hiện mất cân bằng, tạo GitHub issue báo cáo
